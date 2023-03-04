@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 package-lock.json
+.env
 
 # debug
 npm-debug.log*
