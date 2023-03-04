@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
+import { Container, Heading, Text, Divider, Card, CardBody, Button } from '@chakra-ui/react'
 
 import {
   GaslessOnboarding,
@@ -58,17 +58,34 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <h1>GGL-Wallet</h1>
-        {walletAddress && <p>{walletAddress}</p>}
-        <h2>Your Balance</h2>
-        {tokens.map(token => (
-          <div key={token.contract_name}>
-            <img src={token.logo_url} alt="token" />
-            <p>{token.balance / 10 ** token.contract_decimals} {token.contract_ticker_symbol}</p>
-          </div>
-        ))}
-        <button onClick={login}>login</button>    
+      <main>
+        <Container maxW='550px'>
+          <Card>
+            <CardBody>
+              <Heading textAlign="center" mt="3" mb="5">GGL-Wallet</Heading>
+              {walletAddress && <Text textAlign="center">{walletAddress}</Text>}
+              <Divider mt="4" />
+              {tokens.map(token => (
+                <Card
+                  key={token.contract_name}
+                  direction={{ base: 'column', sm: 'row' }}
+                  overflow='hidden'
+                >
+                  <img
+                    width="75px"
+                    src={token.logo_url}
+                    alt='Caffe Latte'
+                  />
+                
+                  <Text fontSize="xl" mt="5">
+                    {token.balance / 10 ** token.contract_decimals} {token.contract_ticker_symbol}
+                  </Text>
+                </Card>
+              ))}
+              {!walletAddress && <Button onClick={login}>login</Button>}
+            </CardBody>
+          </Card>
+        </Container>  
       </main>
     </>
   )
