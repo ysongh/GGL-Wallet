@@ -1,6 +1,5 @@
+import { useState } from 'react';
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 
 import {
@@ -11,6 +10,8 @@ import {
 } from "@gelatonetwork/gasless-onboarding";
 
 export default function Home() {
+  const [walletAddress, setWalletAddress] = useState();
+
   const login = async () => {
     try{
       const gaslessWalletConfig = process.env.NEXT_PUBLIC_GASLESSWALLET_KEY;
@@ -32,8 +33,10 @@ export default function Home() {
       
       await gaslessOnboarding.init();
       const web3AuthProvider = await gaslessOnboarding.login();
-
       console.log("web3AuthProvider", web3AuthProvider)
+      
+      const gaslessWallet = gaslessOnboarding.getGaslessWallet()
+      setWalletAddress(gaslessWallet.getAddress())
     }
     catch(error){
       console.log(error)
@@ -49,7 +52,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1>GGL-Wallet</h1>   
+        <h1>GGL-Wallet</h1>
+        {walletAddress && <p>{walletAddress}</p>}
         <button onClick={login}>login</button>    
       </main>
     </>
