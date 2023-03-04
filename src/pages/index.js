@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head'
 import { Container, Heading, Text, Divider, Card, CardBody, Button } from '@chakra-ui/react'
 
@@ -12,6 +12,10 @@ import {
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState();
   const [tokens, setTokens] = useState([]);
+
+  useEffect(() => {
+    login()
+  }, [])
 
   const login = async () => {
     try{
@@ -82,7 +86,6 @@ export default function Home() {
                   </Text>
                 </Card>
               ))}
-              {!walletAddress && <Button onClick={login}>login</Button>}
             </CardBody>
           </Card>
         </Container>  
