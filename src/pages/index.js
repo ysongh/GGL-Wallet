@@ -9,10 +9,12 @@ import {
 } from "@gelatonetwork/gasless-onboarding";
 
 import Token from '@/components/Token';
+import QRcode from '@/components/QRcode';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState();
   const [tokens, setTokens] = useState([]);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   useEffect(() => {
     login()
@@ -69,6 +71,10 @@ export default function Home() {
             <CardBody>
               <Heading textAlign="center" mt="3" mb="5">GGL-Wallet</Heading>
               {walletAddress && <Text textAlign="center">{walletAddress}</Text>}
+              <Button onClick={() => setShowQRCode(!showQRCode)} mt="3">
+                {!showQRCode ? "Receive" : "Hide"}
+              </Button>
+              {showQRCode && <QRcode address={walletAddress} />}
               <Divider mt="4" />
               {tokens.map(token => (
                 <Token key={token.contract_name} token={token} />
