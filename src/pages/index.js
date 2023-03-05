@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
-import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Heading, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
+import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
 import {
   GaslessOnboarding,
   GaslessWalletConfig,
@@ -11,6 +11,7 @@ import { ethers } from 'ethers'
 
 import Token from '@/components/Token';
 import QRcode from '@/components/QRcode';
+import SpinnerLoad from '@/components/SpinnerLoad';
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '../contractdata'
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
   const [showQRCode, setShowQRCode] = useState(false);
   const [url, setURL] = useState("");
   const [gw, setGW] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     login()
@@ -26,6 +28,7 @@ export default function Home() {
 
   const login = async () => {
     try{
+      setLoading(true);
       const gaslessWalletConfig = { apiKey: process.env.NEXT_PUBLIC_GASLESSWALLET_KEY };
       const loginConfig = {
         domains: ["http://localhost:3000/"],
@@ -57,9 +60,11 @@ export default function Home() {
       const balance = await result.json();
 
       setTokens(balance.data.items);
+      setLoading(false);
     }
     catch(error){
       console.log(error)
+      setLoading(false);
     }
   }
 
@@ -91,39 +96,41 @@ export default function Home() {
       <main>
         <Container maxW='550px'>
           <Card>
-            <CardBody>
-              <Heading textAlign="center" mt="3" mb="5">GGL-Wallet</Heading>
-              {walletAddress && <Text textAlign="center" mb="4">{walletAddress}</Text>}
+            {loading
+              ? <SpinnerLoad />
+              : <CardBody>
+                  {walletAddress && <Text textAlign="center" mb="4">{walletAddress}</Text>}
 
-              <Tabs variant='enclosed'>
-                <TabList>
-                  <Tab>Tokens</Tab>
-                  <Tab onClick={() => setShowQRCode(true)}>Receive</Tab>
-                  <Tab>Mint NFT</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    {tokens.map(token => (
-                      <Token key={token.contract_name} token={token} />
-                    ))}
-                  </TabPanel>
+                  <Tabs variant='enclosed'>
+                    <TabList>
+                      <Tab>Tokens</Tab>
+                      <Tab onClick={() => setShowQRCode(true)}>Receive</Tab>
+                      <Tab>Mint NFT</Tab>
+                    </TabList>
+                    <TabPanels>
+                      <TabPanel>
+                        {tokens.map(token => (
+                          <Token key={token.contract_name} token={token} />
+                        ))}
+                      </TabPanel>
 
-                  <TabPanel>
-                    {showQRCode && <QRcode address={walletAddress} />}
-                  </TabPanel>
+                      <TabPanel>
+                        {showQRCode && <QRcode address={walletAddress} />}
+                      </TabPanel>
 
-                  <TabPanel>
-                    <FormControl mb='3'>
-                      <FormLabel htmlFor='URL'>URL</FormLabel>
-                      <Input value={url} onChange={(e) => setURL(e.target.value)} />
-                    </FormControl>
-                    <Button onClick={mintNFT} mt="3">
-                      Mint
-                    </Button>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </CardBody>
+                      <TabPanel>
+                        <FormControl mb='3'>
+                          <FormLabel htmlFor='URL'>URL</FormLabel>
+                          <Input value={url} onChange={(e) => setURL(e.target.value)} />
+                        </FormControl>
+                        <Button onClick={mintNFT} mt="3">
+                          Mint
+                        </Button>
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </CardBody>
+              }
           </Card>
         </Container>  
       </main>
