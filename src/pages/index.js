@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
 import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
-import {
-  GaslessOnboarding,
-  GaslessWalletConfig,
-  GaslessWalletInterface,
-  LoginConfig,
-} from "@gelatonetwork/gasless-onboarding";
+import { GaslessOnboarding } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from 'ethers'
 
 import Navbar from '@/components/Navbar';
@@ -21,6 +16,7 @@ export default function Home() {
   const [showQRCode, setShowQRCode] = useState(false);
   const [url, setURL] = useState("");
   const [toAddress, setToAddress] = useState("");
+  const [gobMethod, setGOBMethod] = useState(null);
   const [gw, setGW] = useState();
   const [loading, setLoading] = useState(false);
   const [taskid, setTaskid] = useState("");
@@ -52,6 +48,7 @@ export default function Home() {
       await gaslessOnboarding.init();
       const web3AuthProvider = await gaslessOnboarding.login();
       console.log("web3AuthProvider", web3AuthProvider);
+      setGOBMethod(gaslessOnboarding);
 
       const gaslessWallet = gaslessOnboarding.getGaslessWallet();
       setGW(gaslessWallet);
@@ -69,6 +66,10 @@ export default function Home() {
       console.log(error)
       setLoading(false);
     }
+  }
+
+  const logout = async () => {
+    await gobMethod.logout();
   }
 
   const mintNFT = async () => {
@@ -104,7 +105,7 @@ export default function Home() {
               ? <SpinnerLoad />
               : <CardBody>
 
-                  <Navbar />
+                  <Navbar gobMethod={gobMethod} />
                   {walletAddress && <Text textAlign="center" mt="5" mb="6">{ walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}</Text>}
 
                   <Tabs variant='line'>
@@ -112,6 +113,7 @@ export default function Home() {
                       <Tab>Tokens</Tab>
                       <Tab onClick={() => setShowQRCode(true)}>Receive</Tab>
                       <Tab>Mint NFT</Tab>
+                      <Tab>Setting</Tab>
                     </TabList>
                     <TabPanels mt="5">
                       <TabPanel>
@@ -138,6 +140,12 @@ export default function Home() {
                           Free Mint
                         </Button>
                         <Text mt="2">{taskid}</Text>
+                      </TabPanel>
+
+                      <TabPanel mt="5">
+                        <Button bgColor="#b01a33" color="white" onClick={logout}>
+                          Logout
+                        </Button>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
