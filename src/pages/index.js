@@ -22,7 +22,7 @@ export default function Home() {
 
   const login = async () => {
     try{
-      const gaslessWalletConfig = process.env.NEXT_PUBLIC_GASLESSWALLET_KEY;
+      const gaslessWalletConfig = { apiKey: process.env.NEXT_PUBLIC_GASLESSWALLET_KEY };
       const loginConfig = {
         domains: ["http://localhost:3000/"],
         chain: {
