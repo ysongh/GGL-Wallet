@@ -11,4 +11,4 @@ NEXT_PUBLIC_COVALENT_APIKEY = "< Your Covalent API key >"
 NEXT_PUBLIC_RPC =  "< Your RPC for Goerli >"
 ```
 - Run `npm run dev` to start the dApp
--Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
