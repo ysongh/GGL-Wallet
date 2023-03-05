@@ -9,6 +9,7 @@ import {
 } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from 'ethers'
 
+import Navbar from '@/components/Navbar';
 import Token from '@/components/Token';
 import QRcode from '@/components/QRcode';
 import SpinnerLoad from '@/components/SpinnerLoad';
@@ -94,11 +95,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Container maxW='550px'>
-          <Card>
+        <Container maxW='500px'>
+          <Card mt="5" height="600px">
             {loading
               ? <SpinnerLoad />
               : <CardBody>
+
+                  <Navbar />
                   {walletAddress && <Text textAlign="center" mt="5" mb="6">{ walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}</Text>}
 
                   <Tabs variant='enclosed'>
