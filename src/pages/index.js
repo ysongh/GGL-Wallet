@@ -23,6 +23,7 @@ export default function Home() {
   const [toAddress, setToAddress] = useState("");
   const [gw, setGW] = useState();
   const [loading, setLoading] = useState(false);
+  const [taskid, setTaskid] = useState("");
 
   useEffect(() => {
     login()
@@ -82,6 +83,7 @@ export default function Home() {
       );
 
       console.log(taskId)
+      setTaskid(taskId)
     } catch (error) {
       console.log(error)
     }
@@ -97,7 +99,7 @@ export default function Home() {
       </Head>
       <main>
         <Container maxW='500px'>
-          <Card mt="5" height="600px">
+          <Card bgColor="#faf2f5" mt="5" height="600px">
             {loading
               ? <SpinnerLoad />
               : <CardBody>
@@ -105,7 +107,7 @@ export default function Home() {
                   <Navbar />
                   {walletAddress && <Text textAlign="center" mt="5" mb="6">{ walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}</Text>}
 
-                  <Tabs variant='enclosed'>
+                  <Tabs variant='line'>
                     <TabList>
                       <Tab>Tokens</Tab>
                       <Tab onClick={() => setShowQRCode(true)}>Receive</Tab>
@@ -126,15 +128,16 @@ export default function Home() {
                       <TabPanel  mt="5">
                         <FormControl mb='3'>
                           <FormLabel htmlFor='URL'>URL</FormLabel>
-                          <Input value={url} onChange={(e) => setURL(e.target.value)} />
+                          <Input value={url} bgColor="white" onChange={(e) => setURL(e.target.value)} />
                         </FormControl>
                         <FormControl mb='3'>
                           <FormLabel htmlFor='URL'>To</FormLabel>
-                          <Input value={toAddress} onChange={(e) => setToAddress(e.target.value)} />
+                          <Input value={toAddress}  bgColor="white" onChange={(e) => setToAddress(e.target.value)} />
                         </FormControl>
-                        <Button onClick={mintNFT} mt="3">
+                        <Button bgColor="#b01a33" color="white" onClick={mintNFT} mt="3">
                           Free Mint
                         </Button>
+                        <Text mt="2">{taskid}</Text>
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
