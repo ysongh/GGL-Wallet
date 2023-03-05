@@ -1,20 +1,24 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
-import { Container, Heading, Text, Divider, Card, CardBody, Button } from '@chakra-ui/react'
+import { Container, Heading, Text, Divider, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
 import {
   GaslessOnboarding,
   GaslessWalletConfig,
   GaslessWalletInterface,
   LoginConfig,
 } from "@gelatonetwork/gasless-onboarding";
+import { ethers } from 'ethers'
 
 import Token from '@/components/Token';
 import QRcode from '@/components/QRcode';
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from '../contractdata'
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState();
   const [tokens, setTokens] = useState([]);
   const [showQRCode, setShowQRCode] = useState(false);
+  const [url, setURL] = useState("");
+  const [gw, setGW] = useState();
 
   useEffect(() => {
     login()
@@ -41,9 +45,11 @@ export default function Home() {
       
       await gaslessOnboarding.init();
       const web3AuthProvider = await gaslessOnboarding.login();
-      console.log("web3AuthProvider", web3AuthProvider)
+      console.log("web3AuthProvider", web3AuthProvider);
 
-      const gaslessWallet = gaslessOnboarding.getGaslessWallet()
+      const gaslessWallet = gaslessOnboarding.getGaslessWallet();
+      setGW(gaslessWallet);
+
       const address = gaslessWallet.getAddress()
       setWalletAddress(address)
 
@@ -53,6 +59,23 @@ export default function Home() {
       setTokens(balance.data.items);
     }
     catch(error){
+      console.log(error)
+    }
+  }
+
+  const mintNFT = async () => {
+    try{
+      let iface = new ethers.utils.Interface(CONTRACT_ABI);
+      let x = iface.encodeFunctionData("mintImage", [ url ])
+      console.log(x)
+
+      const { taskId } = await gw.sponsorTransaction(
+        CONTRACT_ADDRESS,
+        x,
+      );
+
+      console.log(taskId)
+    } catch (error) {
       console.log(error)
     }
   }
@@ -79,6 +102,14 @@ export default function Home() {
               {tokens.map(token => (
                 <Token key={token.contract_name} token={token} />
               ))}
+              <Divider my="4" />
+              <FormControl mb='3'>
+                <FormLabel htmlFor='URL'>URL</FormLabel>
+                <Input value={url} onChange={(e) => setURL(e.target.value)} />
+              </FormControl>
+              <Button onClick={mintNFT} mt="3">
+                Mint NFT
+              </Button>
             </CardBody>
           </Card>
         </Container>  
