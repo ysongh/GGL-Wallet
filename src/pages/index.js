@@ -99,7 +99,7 @@ export default function Home() {
             {loading
               ? <SpinnerLoad />
               : <CardBody>
-                  {walletAddress && <Text textAlign="center" mb="4">{walletAddress}</Text>}
+                  {walletAddress && <Text textAlign="center" mt="5" mb="6">{ walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}</Text>}
 
                   <Tabs variant='enclosed'>
                     <TabList>
@@ -107,18 +107,19 @@ export default function Home() {
                       <Tab onClick={() => setShowQRCode(true)}>Receive</Tab>
                       <Tab>Mint NFT</Tab>
                     </TabList>
-                    <TabPanels>
+                    <TabPanels mt="5">
                       <TabPanel>
                         {tokens.map(token => (
                           <Token key={token.contract_name} token={token} />
                         ))}
                       </TabPanel>
 
-                      <TabPanel>
+                      <TabPanel mt="5">
                         {showQRCode && <QRcode address={walletAddress} />}
+                        {walletAddress && <Text textAlign="center" mt="4">{walletAddress}</Text>}
                       </TabPanel>
 
-                      <TabPanel>
+                      <TabPanel  mt="5">
                         <FormControl mb='3'>
                           <FormLabel htmlFor='URL'>URL</FormLabel>
                           <Input value={url} onChange={(e) => setURL(e.target.value)} />
