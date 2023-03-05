@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
-import { Container, Heading, Text, Divider, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
+import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Heading, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
 import {
   GaslessOnboarding,
   GaslessWalletConfig,
@@ -93,23 +93,36 @@ export default function Home() {
           <Card>
             <CardBody>
               <Heading textAlign="center" mt="3" mb="5">GGL-Wallet</Heading>
-              {walletAddress && <Text textAlign="center">{walletAddress}</Text>}
-              <Button onClick={() => setShowQRCode(!showQRCode)} mt="3">
-                {!showQRCode ? "Receive" : "Hide"}
-              </Button>
-              {showQRCode && <QRcode address={walletAddress} />}
-              <Divider mt="4" />
-              {tokens.map(token => (
-                <Token key={token.contract_name} token={token} />
-              ))}
-              <Divider my="4" />
-              <FormControl mb='3'>
-                <FormLabel htmlFor='URL'>URL</FormLabel>
-                <Input value={url} onChange={(e) => setURL(e.target.value)} />
-              </FormControl>
-              <Button onClick={mintNFT} mt="3">
-                Mint NFT
-              </Button>
+              {walletAddress && <Text textAlign="center" mb="4">{walletAddress}</Text>}
+
+              <Tabs variant='enclosed'>
+                <TabList>
+                  <Tab>Tokens</Tab>
+                  <Tab onClick={() => setShowQRCode(true)}>Receive</Tab>
+                  <Tab>Mint NFT</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    {tokens.map(token => (
+                      <Token key={token.contract_name} token={token} />
+                    ))}
+                  </TabPanel>
+
+                  <TabPanel>
+                    {showQRCode && <QRcode address={walletAddress} />}
+                  </TabPanel>
+
+                  <TabPanel>
+                    <FormControl mb='3'>
+                      <FormLabel htmlFor='URL'>URL</FormLabel>
+                      <Input value={url} onChange={(e) => setURL(e.target.value)} />
+                    </FormControl>
+                    <Button onClick={mintNFT} mt="3">
+                      Mint
+                    </Button>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
             </CardBody>
           </Card>
         </Container>  
