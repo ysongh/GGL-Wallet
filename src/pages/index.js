@@ -20,6 +20,7 @@ export default function Home() {
   const [tokens, setTokens] = useState([]);
   const [showQRCode, setShowQRCode] = useState(false);
   const [url, setURL] = useState("");
+  const [toAddress, setToAddress] = useState("");
   const [gw, setGW] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -34,8 +35,8 @@ export default function Home() {
       const loginConfig = {
         domains: ["http://localhost:3000/"],
         chain: {
-          id: 80001,
-          rpcUrl: "https://rpc-mumbai.maticvigil.com/",
+          id: 5,
+          rpcUrl: process.env.NEXT_PUBLIC_RPC,
         },
           openLogin: {
             redirectUrl: `http://localhost:3000/`,
@@ -57,7 +58,7 @@ export default function Home() {
       const address = gaslessWallet.getAddress()
       setWalletAddress(address)
 
-      const result = await fetch(`https://api.covalenthq.com/v1/80001/address/${address}/balances_v2/?key=${process.env.NEXT_PUBLIC_COVALENT_APIKEY}`);
+      const result = await fetch(`https://api.covalenthq.com/v1/5/address/${address}/balances_v2/?key=${process.env.NEXT_PUBLIC_COVALENT_APIKEY}`);
       const balance = await result.json();
 
       setTokens(balance.data.items);
@@ -72,7 +73,7 @@ export default function Home() {
   const mintNFT = async () => {
     try{
       let iface = new ethers.utils.Interface(CONTRACT_ABI);
-      let x = iface.encodeFunctionData("mintImage", [ url ])
+      let x = iface.encodeFunctionData("mintImage", [ url, toAddress ])
       console.log(x)
 
       const { taskId } = await gw.sponsorTransaction(
@@ -127,8 +128,12 @@ export default function Home() {
                           <FormLabel htmlFor='URL'>URL</FormLabel>
                           <Input value={url} onChange={(e) => setURL(e.target.value)} />
                         </FormControl>
+                        <FormControl mb='3'>
+                          <FormLabel htmlFor='URL'>To</FormLabel>
+                          <Input value={toAddress} onChange={(e) => setToAddress(e.target.value)} />
+                        </FormControl>
                         <Button onClick={mintNFT} mt="3">
-                          Mint
+                          Free Mint
                         </Button>
                       </TabPanel>
                     </TabPanels>

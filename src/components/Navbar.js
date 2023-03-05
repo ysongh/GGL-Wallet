@@ -5,7 +5,7 @@ export default function Navbar() {
     <Box mt="6">
       <center>
         <Select size='lg' width="250px">
-          <option value='option1'>Polygon Mumbai</option>
+          <option value='option1'>Goerli</option>
         </Select>
       </center>
     </Box>
