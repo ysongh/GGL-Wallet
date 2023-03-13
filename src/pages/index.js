@@ -30,13 +30,13 @@ export default function Home() {
       setLoading(true);
       const gaslessWalletConfig = { apiKey: process.env.NEXT_PUBLIC_GASLESSWALLET_KEY };
       const loginConfig = {
-        domains: ["http://localhost:3000/"],
+        domains: [window.location.origin],
         chain: {
           id: 5,
           rpcUrl: process.env.NEXT_PUBLIC_RPC,
         },
           openLogin: {
-            redirectUrl: `http://localhost:3000/`,
+            redirectUrl: `https://ggl-wallet.netlify.app/`,
           },
   
       };
