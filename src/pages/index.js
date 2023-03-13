@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
-import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
+import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Tooltip, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
 import { GaslessOnboarding } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from 'ethers'
 
@@ -106,7 +106,12 @@ export default function Home() {
               : <CardBody>
 
                   <Navbar gobMethod={gobMethod} />
-                  {walletAddress && <Text textAlign="center" mt="5" mb="6">{ walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}</Text>}
+                  {walletAddress
+                      && <Tooltip label={walletAddress}>
+                          <Text textAlign="center" mt="5" mb="6" cursor="pointer">
+                            { walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}
+                          </Text>
+                        </Tooltip>}
 
                   <Tabs variant='line'>
                     <TabList>
