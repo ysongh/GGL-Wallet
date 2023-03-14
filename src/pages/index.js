@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
-import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Tooltip, Text, FormControl, FormLabel, Input, Card, CardBody, Button } from '@chakra-ui/react'
+import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Tooltip, Text, FormControl, FormLabel, Input, Card, CardBody, Button, useToast } from '@chakra-ui/react'
 import { GaslessOnboarding } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from 'ethers'
 
@@ -11,6 +11,8 @@ import SpinnerLoad from '@/components/SpinnerLoad';
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '../contractdata'
 
 export default function Home() {
+  const toast = useToast()
+
   const [walletAddress, setWalletAddress] = useState();
   const [tokens, setTokens] = useState([]);
   const [showQRCode, setShowQRCode] = useState(false);
@@ -92,6 +94,14 @@ export default function Home() {
 
   const copyAddress = () => {
     navigator.clipboard.writeText(walletAddress);
+
+    toast({
+      title: 'Copied',
+      position: 'top',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
   }
 
   return (
