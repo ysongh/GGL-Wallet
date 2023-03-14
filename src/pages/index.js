@@ -90,6 +90,10 @@ export default function Home() {
     }
   }
 
+  const copyAddress = () => {
+    navigator.clipboard.writeText(walletAddress);
+  }
+
   return (
     <>
       <Head>
@@ -108,7 +112,7 @@ export default function Home() {
                   <Navbar gobMethod={gobMethod} />
                   {walletAddress
                       && <Tooltip label={walletAddress}>
-                          <Text textAlign="center" mt="5" mb="6" cursor="pointer">
+                          <Text textAlign="center" mt="5" mb="6" cursor="pointer" onClick={copyAddress}>
                             { walletAddress.slice(0, 5) + "..." + walletAddress.slice(37, 42)}
                           </Text>
                         </Tooltip>}
