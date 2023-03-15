@@ -3,7 +3,7 @@ import { Container, TabList, Tabs, TabPanels, TabPanel, Tab, Tooltip, Text, Form
 import { GaslessOnboarding } from "@gelatonetwork/gasless-onboarding";
 import { ethers } from 'ethers'
 
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/layout/Navbar';
 import Token from '@/components/Token';
 import QRcode from '@/components/QRcode';
 import SpinnerLoad from '@/components/SpinnerLoad';
